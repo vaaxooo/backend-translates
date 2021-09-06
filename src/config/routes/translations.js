@@ -8,4 +8,4 @@ const {
 /* BEGIN ROUTES */
 express.get('/get', getTranslations);
 
-module.exports.LanguagesRoutes = express;
+module.exports.TranslationsRoutes = express;

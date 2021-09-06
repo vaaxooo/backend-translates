@@ -14,6 +14,7 @@ const {FilesRoutes} = require('./src/config/routes/files/routes');
 const {OrdersRoutes} = require('./src/config/routes/orders/routes');
 const {PricesRoutes} = require('./src/config/routes/admin/prices');
 const {LanguagesRoutes} = require('./src/config/routes/admin/languages');
+const {TranslationsRoutes} = require('./src/config/routes/translations');
 /* END IMPORTS */
 
 
@@ -51,6 +52,7 @@ express.use('/api/files', FilesRoutes);
 express.use('/api/orders', OrdersRoutes);
 express.use('/api/admin/prices', PricesRoutes);
 express.use('/api/admin/languages', LanguagesRoutes);
+express.use('/api/translations/get', TranslationsRoutes)
 /* END ROUTES */
 
 
