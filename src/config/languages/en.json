@@ -42,6 +42,10 @@
   "success_upload_files": "All files uploaded successfully",
   "success_delete_file": "File was deleted successfully",
   "create_orders_service": "The order has been successfully created!",
-  "order_not_found": "Order not found",
-  "edit_orders_service": "The order has been successfully updated!"
+  "order_not_found": "Order is not found",
+  "edit_orders_service": "The order has been successfully updated!",
+  "order_deleted_success": "Order successfully deleted",
+  "users_deleted_success": "User was deleted successfully",
+  "user_not_found": "User is not found!",
+  "user_success_created": "User has been successfully created",
 }

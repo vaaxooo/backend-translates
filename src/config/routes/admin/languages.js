@@ -5,19 +5,21 @@ const {
     create: createLanguages,
     edit: editLanguages,
     remove: removeLanguages,
-    getLanguagesList: getLanguages
+    getLanguagesList: getLanguages,
+    getData: getLanguagesData
 } = require('../../../controllers/admin/languages/LanguagesController');
 
 const {
     create: createTranslations,
     edit: editTranslations,
-    remove: removeTranslations
+    remove: removeTranslations,
 } = require('../../../controllers/admin/languages/TranslationsController');
 
 /* BEGIN ROUTES */
 
 
 express.get('/get', Admin, getLanguages);
+express.get('/getData', Admin, getLanguagesData);
 express.post('/add', Admin, createLanguages);
 express.put('/edit', Admin, editLanguages);
 express.delete('/delete', Admin, removeLanguages);

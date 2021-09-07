@@ -3,7 +3,9 @@ const {postgres} = require('../../../utils/postgres');
 const {
     serviceCreate,
     serviceEdit,
-    serviceRemove
+    serviceRemove,
+    serviceGetPrice,
+    serviceGetPrices
 } = require('../../../services/admin/prices/PricesService');
 
 module.exports = {
@@ -58,6 +60,33 @@ module.exports = {
             });
         }
         return response.json(await serviceRemove(id));
+    },
+
+
+    /**
+     * Admin: Get price data by id
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    getPrice: async function (request, response) {
+        if (!(request.query.id)) {
+            return response.json({
+                status: false,
+                message: "The [id] parameter is required"
+            });
+        }
+        return response.json(await serviceGetPrice(+request.query.id));
+    },
+
+    /**
+     * Admin: Get prices list
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    getPrices: async function (request, response) {
+        return response.json(await serviceGetPrices(request.query?.offset || 0, request.query?.limit || 10));
     }
 
 }

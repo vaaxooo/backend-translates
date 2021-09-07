@@ -2,7 +2,7 @@
 
 const express = require('express')();
 const cors = require('cors');
-const fileUplaod = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 const expressOasGenerator = require('express-oas-generator');
 
 const bodyParser = require('body-parser');
@@ -15,6 +15,8 @@ const {OrdersRoutes} = require('./src/config/routes/orders/routes');
 const {PricesRoutes} = require('./src/config/routes/admin/prices');
 const {LanguagesRoutes} = require('./src/config/routes/admin/languages');
 const {TranslationsRoutes} = require('./src/config/routes/translations');
+const {AdminOrdersRoutes} = require('./src/config/routes/admin/orders');
+const {AdminUsersRoutes} = require('./src/config/routes/admin/users');
 /* END IMPORTS */
 
 
@@ -28,7 +30,6 @@ expressOasGenerator.init(express, {
 });
 
 
-
 express.use(bodyParser.urlencoded({extended: false}));
 express.use(bodyParser.json());
 
@@ -37,7 +38,7 @@ express.use(cors({
     methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
 }));
 
-express.use(fileUplaod({
+express.use(fileUpload({
     createParentPath: true,
     useTempFiles: true,
     tempFileDir: './uploads/temp'
@@ -50,9 +51,11 @@ express.set('view cache', true);
 express.use('/api/cabinet', CabinetRoutes);
 express.use('/api/files', FilesRoutes);
 express.use('/api/orders', OrdersRoutes);
+express.use('/api/translations', TranslationsRoutes);
 express.use('/api/admin/prices', PricesRoutes);
 express.use('/api/admin/languages', LanguagesRoutes);
-express.use('/api/translations/get', TranslationsRoutes)
+express.use('/api/admin/orders', AdminOrdersRoutes);
+express.use('/api/admin/users', AdminUsersRoutes);
 /* END ROUTES */
 
 

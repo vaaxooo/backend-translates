@@ -107,8 +107,8 @@ module.exports = {
 
     /**
      * Handle user password recovery
-     * @param params
      * @returns {Promise<void>}
+     * @param email
      */
     serviceRecovery: async function (email) {
         try {
@@ -154,8 +154,8 @@ module.exports = {
 
     /**
      * Password recovery code verification handler
-     * @param email
      * @param recoveryCode
+     * @param password
      * @returns {Promise<void>}
      */
     serviceCheckRecoveryCode: async function(recoveryCode, password) {
@@ -223,8 +223,8 @@ module.exports = {
 
     /**
      * Handle two-factor authentication
-     * @param user_id
      * @returns {Promise<void>}
+     * @param email
      */
     serviceTwoFactorAuth: async function (email) {
         try {

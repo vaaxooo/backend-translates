@@ -1,7 +1,9 @@
 const {
     serviceEdit,
     serviceCreate,
-    serviceRemove
+    serviceRemove,
+    serviceGetOrder,
+    serviceGetOrders
 } = require('../../services/orders/OrdersService');
 
 module.exports = {
@@ -42,6 +44,34 @@ module.exports = {
             })
         }
         return response.json(await serviceEdit(+user_id, +id, langFrom, langTo, files));
+    },
+
+    /**
+     * Admin: Get Order by id
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    getOrder: async function(request, response) {
+        const user_id = request.user.user_id
+        if(!(request.query.id)) {
+            return response.json({
+                status: false,
+                message: "The [id] parameter is required"
+            })
+        }
+        return response.json(await serviceGetOrder(user_id, +request.query.id));
+    },
+
+    /**
+     * Admin: Get Orders list
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    getOrders: async function(request, response) {
+        const user_id = request.user.user_id
+        return response.json(await serviceGetOrders(user_id, request.query?.offset || 0, request.query?.limit || 10));
     }
 
 }

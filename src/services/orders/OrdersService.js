@@ -23,7 +23,7 @@ module.exports = {
                 filesArray.push(result.data);
             }
             let totalPrice = 0;
-            filesArray.filter(item => totalPrice = item.price);
+            filesArray.filter(item => totalPrice = (+totalPrice + +item.price).toFixed(2));
             await Orders.create({
                 user_id,
                 langFrom,
@@ -34,7 +34,7 @@ module.exports = {
             return {
                 status: true,
                 totalPrice: totalPrice,
-                files: files,
+                files: filesArray,
                 message: "The order has been successfully created!"
             }
         } catch (error) {
@@ -104,7 +104,7 @@ module.exports = {
             return {
                 status: true,
                 totalPrice: totalPrice,
-                files: filesArray || order.files,
+                files: filesArray.length > 0 ? filesArray : order.files,
                 message: "The order has been successfully updated!"
             }
         } catch (error) {
@@ -114,5 +114,64 @@ module.exports = {
                 message: "Oops.. Something went wrong"
             }
         }
+    },
+
+
+    /**
+     * @param user_id
+     * @param id
+     * @returns {Promise<void>}
+     */
+    serviceGetOrder: async function(user_id, id) {
+        try {
+            const order = await Orders.findOne({
+                where: {
+                    id,
+                    user_id
+                }
+            });
+            if (!order) {
+                return {
+                    status: false,
+                    message: "Order is not found"
+                };
+            }
+            return {
+                status: true,
+                data: order
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
+    },
+
+    /**
+     * @returns {Promise<void>}
+     */
+    serviceGetOrders: async function(user_id, offset = 0, limit = 10) {
+        try {
+            const orders = await Orders.findAll({
+                where: {
+                    user_id
+                },
+                offset: offset,
+                limit: limit
+            });
+            return {
+                status: true,
+                data: orders
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
     }
+
 }

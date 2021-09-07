@@ -1,5 +1,5 @@
 const express = require('express')();
-const Admin = require('../../../services/middleware/Admin');
+const Admin = require('../../services/middleware/Admin');
 
 const {
     getTranslations,

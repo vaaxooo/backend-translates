@@ -83,6 +83,59 @@ module.exports = {
                 message: "Oops.. Something went wrong"
             }
         }
+    },
+
+    /**
+     * Admin: Get price data handler
+     * @param id
+     * @returns {Promise<{message: string, status: boolean}|{data: Promise<Users | null>, status: boolean}>}
+     */
+    serviceGetPrice: async function (id) {
+        try {
+            const price = await Prices.findOne({
+                where: {id}
+            });
+            if (!price) {
+                return {
+                    status: false,
+                    message: "Price is not found"
+                };
+            }
+            return {
+                status: true,
+                data: price
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
+    },
+
+    /**
+     * Admin: Get prices list handler
+     * @returns {Promise<{data: Promise<Users[]>, status: boolean}|{message: string, status: boolean}>}
+     */
+    serviceGetPrices: async function (offset = 0, limit = 10) {
+        try {
+            const Prices = await Prices.findAll({
+                offset,
+                limit
+            });
+            return {
+                status: true,
+                data: Prices
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
     }
+
 
 }

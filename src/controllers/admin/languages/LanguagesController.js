@@ -3,7 +3,8 @@ const {
     serviceCreate,
     serviceRemove,
     serviceGet,
-    serviceGetTranslations
+    serviceGetTranslations,
+    serviceGetData
 } = require('../../../services/admin/languages/LanguagesService');
 
 module.exports = {
@@ -65,7 +66,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     getLanguagesList: async function(request, response) {
-        return response.json(await serviceGet());
+        return response.json(await serviceGet(request.query?.offset || 0, request.query?.limit || 10));
     },
 
     /**
@@ -75,8 +76,23 @@ module.exports = {
      * @returns {Promise<*>}
      */
     getTranslations: async function(request, response) {
-        const language = request.user.lang || "en";
+        const language = request.user?.lang || "en";
         return response.json(await serviceGetTranslations(language));
+    },
+
+    /**
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    getData: async function(request, response) {
+        if(!request.body.id) {
+            return response.json({
+                status: false,
+                message: "The [id] parameter is required"
+            });
+        }
+        return response.json(await serviceGetData(request.query.id));
     }
 
 }

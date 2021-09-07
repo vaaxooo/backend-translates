@@ -96,10 +96,12 @@ module.exports = {
      * Handle get all languages
      * @returns {Promise<{message: string, status: boolean}|{data: Languages[], status: boolean}>}
      */
-    serviceGet: async function() {
+    serviceGet: async function(offset = 0, limit = 10) {
         try {
             const languages = await Languages.findAll({
-                attributes: ["id", "code", "name"]
+                attributes: ["id", "code", "name"],
+                offset,
+                limit
             });
             return {
                 status: true,
@@ -122,9 +124,30 @@ module.exports = {
     serviceGetTranslations: async function(language) {
         try {
             let configContent = fs.readFileSync('src/config/languages/' + language + '.json');
+            let translations = JSON.parse(configContent);
             return {
                 status: true,
-                data: configContent
+                data: translations
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
+    },
+
+    /**
+     * @param id
+     * @returns {Promise<{data: Languages, status: boolean}|{message: string, status: boolean}>}
+     */
+    serviceGetData: async function(id) {
+        try {
+            const language = await Languages.findOne();
+            return {
+                status: true,
+                data: language
             }
         } catch (error) {
             apiErrorLog(error);
