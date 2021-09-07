@@ -64,7 +64,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     getOrders: async function(request, response) {
-        return response.json(await serviceGetOrders(request.query?.offset || 0, request.query?.limit || 10));
+        return response.json(await serviceGetOrders(request.query));
     }
 
 }

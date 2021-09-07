@@ -17,6 +17,7 @@ const {LanguagesRoutes} = require('./src/config/routes/admin/languages');
 const {TranslationsRoutes} = require('./src/config/routes/translations');
 const {AdminOrdersRoutes} = require('./src/config/routes/admin/orders');
 const {AdminUsersRoutes} = require('./src/config/routes/admin/users');
+const {PiastrixRoutes} = require('./src/config/routes/payments/piastrix');
 /* END IMPORTS */
 
 
@@ -56,6 +57,7 @@ express.use('/api/admin/prices', PricesRoutes);
 express.use('/api/admin/languages', LanguagesRoutes);
 express.use('/api/admin/orders', AdminOrdersRoutes);
 express.use('/api/admin/users', AdminUsersRoutes);
+express.use('/api/payments/piastrix', PiastrixRoutes);
 /* END ROUTES */
 
 

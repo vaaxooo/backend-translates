@@ -71,7 +71,7 @@ module.exports = {
      */
     getOrders: async function(request, response) {
         const user_id = request.user.user_id
-        return response.json(await serviceGetOrders(user_id, request.query?.offset || 0, request.query?.limit || 10));
+        return response.json(await serviceGetOrders(user_id, request.query));
     }
 
 }

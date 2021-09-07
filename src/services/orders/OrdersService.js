@@ -152,14 +152,20 @@ module.exports = {
     /**
      * @returns {Promise<void>}
      */
-    serviceGetOrders: async function(user_id, offset = 0, limit = 10) {
+    serviceGetOrders: async function(user_id, params = {}, offset = 0, limit = 10) {
         try {
+            let sort = [];
+            params?.langFrom ? sort.push(['langForm', params.langFrom]) : null;
+            params?.langTo ? sort.push(['langTo', params.langTo]) : null;
+            params?.price ? sort.push(['price', params.price]) : null;
+            params?.in_process ? sort.push(['in_process', params.in_process]) : null;
             const orders = await Orders.findAll({
                 where: {
                     user_id
                 },
-                offset: offset,
-                limit: limit
+                order: sort,
+                offset: params?.offset || 0,
+                limit: params?.limit || 10
             });
             return {
                 status: true,
