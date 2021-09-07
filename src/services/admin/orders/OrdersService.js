@@ -1,5 +1,8 @@
+const {mailer} = require('../../../utils/mailer');
+
 const {apiErrorLog} = require("../../../utils/logger");
 const {Orders} = require("../../../models/Orders");
+const {Users} = require("../../../models/Users");
 const {
     serviceUploadOneFile,
     serviceRemove
@@ -148,5 +151,68 @@ module.exports = {
                 message: "Oops.. Something went wrong"
             }
         }
+    },
+
+    /**
+     * @param order_id
+     * @param status
+     * @returns {Promise<{message: string, status: boolean}>}
+     */
+    serviceProcess: async function(order_id, status) {
+        try {
+            await Orders.update({in_process: status}, {
+                where: {
+                    id: order_id
+                }
+            });
+            return {
+                status: true,
+                message: "Status has been successfully changed!"
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
+    },
+
+    /**
+     * @param order_id
+     * @param status
+     * @returns {Promise<{message: string, status: boolean}>}
+     */
+    serviceStatus: async function(order_id, status) {
+        try {
+            const order = await Orders.update({status: status}, {
+                where: {
+                    id: order_id
+                }
+            });
+            const user = await Users.findOne({
+                where: {
+                    email: order.user_id
+                }
+            });
+            await mailer.sendMail({
+                from: process.env.SMTP_FROM_EMAIL,
+                to: user.email,
+                subject: "Text translation order completed",
+                text: "Text translation order completed..",
+                html: "<p>Your order for text translation has been completed. You can download the file with the translation in your personal account.</p>",
+            });
+            return {
+                status: true,
+                message: "Status has been successfully changed!"
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
     }
+
 }

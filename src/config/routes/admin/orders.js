@@ -5,14 +5,27 @@ const {
     edit,
     remove,
     getOrders,
-    getOrder
+    getOrder,
+    setProcess,
+    setStatus
 } = require('../../../controllers/admin/orders/OrdersController');
 
 /* BEGIN ROUTES */
 
+/**
+ * @openapi
+ * /api/admin/orders/edit:
+ *   put:
+ *     description: Welcome to swagger-jsdoc!
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
 express.put('/edit', Admin, edit);
 express.delete('/delete', Admin, remove);
 express.get('/getOrder', Admin, getOrder);
-express.get('/getOrders', Admin, getOrders)
+express.get('/getOrders', Admin, getOrders);
+express.get('/process', Admin, setProcess);
+express.get('/status', Admin, setProcess);
 
 module.exports.AdminOrdersRoutes = express;

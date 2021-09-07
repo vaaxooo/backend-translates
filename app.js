@@ -1,6 +1,6 @@
 'use strict'
 
-const express = require('express')();
+const app = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const expressOasGenerator = require('express-oas-generator');
@@ -20,6 +20,7 @@ const {AdminUsersRoutes} = require('./src/config/routes/admin/users');
 const {PiastrixRoutes} = require('./src/config/routes/payments/piastrix');
 /* END IMPORTS */
 
+const express = app();
 
 expressOasGenerator.init(express, {
     predefinedSpec: function(spec) {
@@ -59,7 +60,7 @@ express.use('/api/admin/orders', AdminOrdersRoutes);
 express.use('/api/admin/users', AdminUsersRoutes);
 express.use('/api/payments/piastrix', PiastrixRoutes);
 /* END ROUTES */
-
+express.use(app.static('./uploads'));
 
 const PORT = process.env.PORT || 3000;
 express.listen(PORT, async () => {

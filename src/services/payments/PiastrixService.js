@@ -11,7 +11,7 @@ module.exports = {
     /**
      * Generate payment url handler
      * @param order_id
-     * @returns {Promise<{}>}
+     * @returns {Promise<{paymentURL: string, status: boolean}|{message: string, status: boolean}>}
      */
     serviceCreate: async function(order_id) {
         try {
@@ -76,7 +76,7 @@ module.exports = {
 
     /**
      * @param params
-     * @returns {Promise<boolean>}
+     * @returns {Promise<boolean|{message: string, status: boolean}>}
      */
     serviceCallback: async function(params) {
         try {
@@ -90,7 +90,7 @@ module.exports = {
                 });
             }
             await Transactions.update({
-                amount: params.shop_amoint,
+                amount: params.shop_amount,
                 status: params.status,
                 currency: params.ps_currency,
                 processed: params.processed

@@ -2,7 +2,9 @@ const {
     serviceEdit,
     serviceRemove,
     serviceGetOrder,
-    serviceGetOrders
+    serviceGetOrders,
+    serviceProcess,
+    serviceStatus
 } = require('../../../services/admin/orders/OrdersService');
 
 module.exports = {
@@ -65,6 +67,38 @@ module.exports = {
      */
     getOrders: async function(request, response) {
         return response.json(await serviceGetOrders(request.query));
+    },
+
+    /**
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    setProcess: async function(request, response) {
+        const {status, order_id} = request.query
+        if(!(status && order_id)) {
+            return response.json({
+                status: false,
+                message: "The [status] parameter is required"
+            })
+        }
+        return response.json(await serviceProcess(order_id, status));
+    },
+
+    /**
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    setStatus: async function(request, response) {
+        const {status, order_id} = request.query
+        if(!(status && order_id)) {
+            return response.json({
+                status: false,
+                message: "The [status] parameter is required"
+            })
+        }
+        return response.json(await serviceStatus(order_id, status));
     }
 
 }
