@@ -1,6 +1,7 @@
 const bcryptjs = require('bcryptjs');
 const fs = require('fs');
 const {apiErrorLog} = require("../../utils/logger");
+const pdf = require('pdf-parse');
 
 module.exports = {
 
@@ -92,12 +93,21 @@ module.exports = {
             let fileName = await bcryptjs.hash(new Date() + file.name.split('.')[0], Math.ceil(Math.random() * (10 - 5 + 1) + 5));
             fileName = fileName.replace(/[^a-zа-яё0-9\s]/gi, "") + "." + file.name.split('.')[1];
             await file.mv("uploads/files/" + fileName);
+
+            let data = {
+                price: (fs.readFileSync("uploads/files/" + fileName).length * 0.30).toFixed(2), //0.30 - cents
+                file: fileName
+            }
+
+            if(file.mimetype === "application/pdf") {
+                let dataBuffer = fs.readFileSync("uploads/files/" + fileName);
+                let pdfContent = await pdf(dataBuffer);
+                data = Object.assign({}, data, {content: pdfContent.text})
+            }
+
             return {
                 status: true,
-                data: {
-                    price: (fs.readFileSync("uploads/files/" + fileName).length * 0.30).toFixed(2), //0.30 - cents
-                    file: fileName
-                },
+                data: data,
             }
         } catch (error) {
             apiErrorLog(error);

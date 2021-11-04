@@ -16,15 +16,14 @@ module.exports = {
      */
     create: async function(request, response) {
         const {langFrom, langTo} = request.body;
-        const {files} = request.files;
         const user_id = request.user.user_id;
-        if(!(langFrom && langTo && files)) {
+        if(!(langFrom && langTo && request.files.files)) {
             return response.json({
                 status: false,
                 message: "The [langFrom, langTo, files] parameters is required"
             })
         }
-        return response.json(await serviceCreate(+user_id, langFrom, langTo, files));
+        return response.json(await serviceCreate(+user_id, langFrom, langTo, request.files.files));
     },
 
     /**
