@@ -10,22 +10,29 @@ module.exports = {
     /**
      * New order creation handler
      * @param user_id
+     * @param email
      * @param langFrom
      * @param langTo
      * @param files
      * @returns {Promise<{totalPrice: number, files: *, message: string, status: boolean}>}
      */
-    serviceCreate: async function(user_id, langFrom, langTo, files) {
+    serviceCreate: async function(user_id, email, langFrom, langTo, files) {
         try {
             let filesArray = [];
-            for await(const file of files) {
-                let result = await serviceUploadOneFile(file);
+            if(Array.isArray(files)) {
+                for await(const file of files) {
+                    let result = await serviceUploadOneFile(file);
+                    filesArray.push(result.data);
+                }
+            } else {
+                let result = await serviceUploadOneFile(files);
                 filesArray.push(result.data);
             }
             let totalPrice = 0;
             filesArray.filter(item => totalPrice = (+totalPrice + +item.price).toFixed(2));
             await Orders.create({
                 user_id,
+                email,
                 langFrom,
                 langTo,
                 price: totalPrice,
@@ -50,17 +57,18 @@ module.exports = {
     /**
      * Order change handle
      * @param user_id
+     * @param email
      * @param id
      * @param langFrom
      * @param langTo
      * @param files
      * @returns {Promise<{totalPrice: number, files: [], message: string, status: boolean}|{message: string, status: boolean}>}
      */
-    serviceEdit: async function (user_id, id, langFrom, langTo, files) {
+    serviceEdit: async function (user_id, email, id, langFrom, langTo, files) {
         try {
             const order = await Orders.findOne({
                 where: {
-                    id, user_id
+                    id, email
                 }
             });
             if(!order) {
@@ -70,7 +78,7 @@ module.exports = {
                 }
             }
 
-            let params = {langForm: langFrom, langTo: langTo}
+            let params = {langForm: langFrom, langTo: langTo, email: email}
             let filesArray = [];
             let totalPrice = 0;
 

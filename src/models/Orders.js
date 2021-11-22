@@ -12,6 +12,10 @@ Orders.init({
     },
     user_id: {
         type: DataTypes.BIGINT,
+        allowNull: true,
+    },
+    email: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
     langFrom: {

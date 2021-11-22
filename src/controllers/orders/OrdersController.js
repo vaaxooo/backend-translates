@@ -15,15 +15,15 @@ module.exports = {
      * @returns {Promise<*>}
      */
     create: async function(request, response) {
-        const {langFrom, langTo} = request.body;
-        const user_id = request.user.user_id;
-        if(!(langFrom && langTo && request.files.files)) {
+        const {langFrom, langTo, email} = request.body;
+        const user_id = request.user.user_id ? request.user.user_id : null;
+        if(!(langFrom && langTo && email && request.files.files)) {
             return response.json({
                 status: false,
-                message: "The [langFrom, langTo, files] parameters is required"
+                message: "The [langFrom, langTo, email, files] parameters is required"
             })
         }
-        return response.json(await serviceCreate(+user_id, langFrom, langTo, request.files.files));
+        return response.json(await serviceCreate(+user_id, email, langFrom, langTo, request.files.files));
     },
 
     /**
@@ -33,16 +33,16 @@ module.exports = {
      * @returns {Promise<*>}
      */
     edit: async function(request, response) {
-        const {id, langFrom, langTo} = request.body;
+        const {id, langFrom, langTo, email} = request.body;
         const {files} = request.files;
-        const user_id = request.user.user_id;
-        if(!(langFrom && langTo && files)) {
+        const user_id = request.user.user_id ? request.user.user_id : null;
+        if(!(langFrom && langTo && email && files)) {
             return response.json({
                 status: false,
-                message: "The [id, langFrom, langTo, files] parameters is required"
+                message: "The [id, email, langFrom, langTo, files] parameters is required"
             })
         }
-        return response.json(await serviceEdit(+user_id, +id, langFrom, langTo, files));
+        return response.json(await serviceEdit(+user_id, email, +id, langFrom, langTo, files));
     },
 
     /**

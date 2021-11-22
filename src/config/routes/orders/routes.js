@@ -11,10 +11,10 @@ const {
 
 /* BEGIN ROUTES */
 
-express.post('/create', Auth, create);
-express.put('/edit', Auth, edit);
-express.get('/getOrder', Auth, getOrder);
-express.get('/getOrders', Auth, getOrders)
+express.post('/create', create);
+express.put('/edit', edit);
+express.get('/getOrder', getOrder);
+express.get('/getOrders', getOrders)
 /*express.delete('/delete', Auth, remove);*/
 
 module.exports.OrdersRoutes = express;
