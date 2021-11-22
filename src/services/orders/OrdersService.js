@@ -30,7 +30,7 @@ module.exports = {
             }
             let totalPrice = 0;
             filesArray.filter(item => totalPrice = (+totalPrice + +item.price).toFixed(2));
-            await Orders.create({
+            const order = await Orders.create({
                 user_id,
                 email,
                 langFrom,
@@ -41,6 +41,7 @@ module.exports = {
             return {
                 status: true,
                 totalPrice: totalPrice,
+                order_id: order.id,
                 files: filesArray,
                 message: "The order has been successfully created!"
             }
