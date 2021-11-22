@@ -17,7 +17,7 @@ module.exports = {
     create: async function(request, response) {
         const {langFrom, langTo, email} = request.body;
         const user_id = request?.user?.user_id ? request?.user?.user_id : null;
-        if(!(langFrom && langTo && email && request.files.files)) {
+        if(!(langFrom && langTo && email && request.files?.files)) {
             return response.json({
                 status: false,
                 message: "The [langFrom, langTo, email, files] parameters is required"
