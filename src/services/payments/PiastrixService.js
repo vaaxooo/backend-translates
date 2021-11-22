@@ -27,11 +27,6 @@ module.exports = {
                     message: "Order not found"
                 }
             }
-            const user = await Users.findOne({
-                where: {
-                    id: order.user_id
-                }
-            });
 
             /**
              * 643 - Российский рубль
@@ -52,11 +47,11 @@ module.exports = {
             const sign = CryptoJS.SHA256(order.price + ":" + 643 + ":" + process.env.PIASTRIX_SHOP_ID + ":" + order.id + process.env.PIASTRIX_SECRET_KEY);
             let generatedUrl = piastrixURL + "?shop_id=" + process.env.PIASTRIX_SHOP_ID
                 + "&amount=" + order.price + "&currency=" + 643 + "&shop_order_id=" + order.id
-                + "&payer_account=" + user.email + "&sign=" + sign
+                + "&payer_account=" + order.email + "&sign=" + sign
                 + "&callback_url=" + process.env.APP_DOMAIN + "/api/payments/piastrix/callback"
 
             await Transactions.create({
-                email: user.email,
+                email: order.email,
                 payment_id: order.id,
                 amount: order.price,
                 status: "Waiting for payment"
