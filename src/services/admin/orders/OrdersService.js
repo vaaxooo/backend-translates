@@ -190,14 +190,9 @@ module.exports = {
                     id: order_id
                 }
             });
-            const user = await Users.findOne({
-                where: {
-                    email: order.user_id
-                }
-            });
             await mailer.sendMail({
                 from: process.env.SMTP_FROM_EMAIL,
-                to: user.email,
+                to: order.email,
                 subject: "Text translation order completed",
                 text: "Text translation order completed..",
                 html: "<p>Your order for text translation has been completed. You can download the file with the translation in your personal account.</p>",
