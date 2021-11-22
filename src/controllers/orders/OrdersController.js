@@ -16,7 +16,7 @@ module.exports = {
      */
     create: async function(request, response) {
         const {langFrom, langTo, email} = request.body;
-        const user_id = request.user.user_id ? request.user.user_id : null;
+        const user_id = request?.user?.user_id ? request?.user?.user_id : null;
         if(!(langFrom && langTo && email && request.files.files)) {
             return response.json({
                 status: false,
@@ -35,7 +35,7 @@ module.exports = {
     edit: async function(request, response) {
         const {id, langFrom, langTo, email} = request.body;
         const {files} = request.files;
-        const user_id = request.user.user_id ? request.user.user_id : null;
+        const user_id = request?.user?.user_id ? request?.user?.user_id : null;
         if(!(langFrom && langTo && email && files)) {
             return response.json({
                 status: false,
