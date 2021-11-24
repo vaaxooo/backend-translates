@@ -22,15 +22,6 @@ const {PiastrixRoutes} = require('./src/config/routes/payments/piastrix');
 
 const express = app();
 
-expressOasGenerator.init(express, {
-    predefinedSpec: function(spec) {
-        _.set(spec, 'paths["/api/cabinet/{name}"]', 'description of a parameter');
-        return spec;
-    },
-    specOutputPath: './swagger/test_spec.json',
-        alwaysServeDocs: true,
-});
-
 
 express.use(bodyParser.urlencoded({extended: false}));
 express.use(bodyParser.json());

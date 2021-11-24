@@ -76,7 +76,7 @@ module.exports = {
      * @param file
      * @returns {Promise<{message: string, status: boolean}>}
      */
-    serviceUploadOneFile: async function (file) {
+    serviceUploadOneFile: async function (file, price) {
         try {
             const allowedFormats = [
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document", //doc
@@ -95,9 +95,12 @@ module.exports = {
             await file.mv("uploads/files/" + fileName);
 
             let data = {
-                price: (fs.readFileSync("uploads/files/" + fileName).length * 0.30).toFixed(2), //0.30 - cents
+                price: (fs.readFileSync("uploads/files/" + fileName).toString().split(' ').length * price).toFixed(2), //0.30 - cents
                 file: fileName
             }
+
+            console.log(data)
+            return
 
             if(file.mimetype === "application/pdf") {
                 let dataBuffer = fs.readFileSync("uploads/files/" + fileName);

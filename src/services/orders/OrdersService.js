@@ -1,5 +1,6 @@
 const {apiErrorLog} = require("../../utils/logger");
 const {Orders} = require("../../models/Orders");
+const {Prices} = require("../../models/Prices");
 const {
     serviceUploadOneFile,
     serviceRemove
@@ -18,14 +19,21 @@ module.exports = {
      */
     serviceCreate: async function(user_id, email, langFrom, langTo, files) {
         try {
+
+            const {price} = await Prices.findOne({
+                where: {
+                    language: langTo
+                }
+            });
+
             let filesArray = [];
             if(Array.isArray(files)) {
                 for await(const file of files) {
-                    let result = await serviceUploadOneFile(file);
+                    let result = await serviceUploadOneFile(file, price);
                     filesArray.push(result.data);
                 }
             } else {
-                let result = await serviceUploadOneFile(files);
+                let result = await serviceUploadOneFile(files, price);
                 filesArray.push(result.data);
             }
             let totalPrice = 0;
