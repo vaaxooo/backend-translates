@@ -99,9 +99,6 @@ module.exports = {
                 file: fileName
             }
 
-            console.log(data)
-            return
-
             if(file.mimetype === "application/pdf") {
                 let dataBuffer = fs.readFileSync("uploads/files/" + fileName);
                 let pdfContent = await pdf(dataBuffer);

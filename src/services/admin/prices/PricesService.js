@@ -120,13 +120,13 @@ module.exports = {
      */
     serviceGetPrices: async function (offset = 0, limit = 10) {
         try {
-            const Prices = await Prices.findAll({
+            const PricesList = await Prices.findAll({
                 offset,
                 limit
             });
             return {
                 status: true,
-                data: Prices
+                data: PricesList
             }
         } catch (error) {
             apiErrorLog(error);

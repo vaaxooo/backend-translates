@@ -30,11 +30,25 @@ module.exports = {
             if(Array.isArray(files)) {
                 for await(const file of files) {
                     let result = await serviceUploadOneFile(file, price);
-                    filesArray.push(result.data);
+                    if(result.status) {
+                        filesArray.push(result.data);
+                    } else {
+                        return {
+                            status: result.status,
+                            message: result.message
+                        }
+                    }
                 }
             } else {
                 let result = await serviceUploadOneFile(files, price);
-                filesArray.push(result.data);
+                if(result.status) {
+                    filesArray.push(result.data);
+                } else {
+                    return {
+                        status: result.status,
+                        message: result.message
+                    }
+                }
             }
             let totalPrice = 0;
             filesArray.filter(item => totalPrice = (+totalPrice + +item.price).toFixed(2));
@@ -55,6 +69,7 @@ module.exports = {
             }
         } catch (error) {
             apiErrorLog(error);
+            console.log(error);
             return {
                 status: false,
                 message: "Oops.. Something went wrong"
