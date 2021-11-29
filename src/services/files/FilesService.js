@@ -3,6 +3,17 @@ const fs = require('fs');
 const {apiErrorLog} = require("../../utils/logger");
 const pdf = require('pdf-parse');
 
+
+function countWords(str) {
+    if (!str.trim()) {
+        return 0;
+    }
+    str = str.replace(/(^\s*)|(\s*$)/gi,"");
+    str = str.replace(/[ ]{2,}/gi," ");
+    str = str.replace(/\n /,"\n");
+    return str.split(' ').length;
+}
+
 module.exports = {
 
     /**
@@ -74,9 +85,11 @@ module.exports = {
     /**
      * File upload handler
      * @param file
+     * @param price
+     * @param countWords
      * @returns {Promise<{message: string, status: boolean}>}
      */
-    serviceUploadOneFile: async function (file, price) {
+    serviceUploadOneFile: async function (file, price, countWords) {
         try {
             const allowedFormats = [
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document", //doc
@@ -95,7 +108,7 @@ module.exports = {
             await file.mv("uploads/files/" + fileName);
 
             let data = {
-                price: (fs.readFileSync("uploads/files/" + fileName).toString().split(' ').length * price).toFixed(2), //0.30 - cents
+                price: (countWords * price).toFixed(2),
                 file: fileName
             }
 
@@ -111,6 +124,7 @@ module.exports = {
             }
         } catch (error) {
             apiErrorLog(error);
+            console.log(error);
             return {
                 status: false,
                 message: "Oops.. Something went wrong"

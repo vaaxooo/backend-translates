@@ -14,10 +14,11 @@ module.exports = {
      * @param email
      * @param langFrom
      * @param langTo
+     * @param countWords
      * @param files
      * @returns {Promise<{totalPrice: number, files: *, message: string, status: boolean}>}
      */
-    serviceCreate: async function(user_id, email, langFrom, langTo, files) {
+    serviceCreate: async function(user_id, email, langFrom, langTo, countWords, files) {
         try {
 
             const {price} = await Prices.findOne({
@@ -29,7 +30,7 @@ module.exports = {
             let filesArray = [];
             if(Array.isArray(files)) {
                 for await(const file of files) {
-                    let result = await serviceUploadOneFile(file, price);
+                    let result = await serviceUploadOneFile(file, price, countWords);
                     if(result.status) {
                         filesArray.push(result.data);
                     } else {
@@ -40,7 +41,7 @@ module.exports = {
                     }
                 }
             } else {
-                let result = await serviceUploadOneFile(files, price);
+                let result = await serviceUploadOneFile(files, price, countWords);
                 if(result.status) {
                     filesArray.push(result.data);
                 } else {
@@ -186,6 +187,8 @@ module.exports = {
      */
     serviceGetOrders: async function(user_id, params = {}, offset = 0, limit = 10) {
         try {
+            console.log(user_id)
+            return
             let sort = [];
             params?.langFrom ? sort.push(['langForm', params.langFrom]) : null;
             params?.langTo ? sort.push(['langTo', params.langTo]) : null;

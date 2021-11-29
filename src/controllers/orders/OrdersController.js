@@ -15,15 +15,15 @@ module.exports = {
      * @returns {Promise<*>}
      */
     create: async function(request, response) {
-        const {langFrom, langTo, email} = request.body;
+        const {langFrom, langTo, countWords, email} = request.body;
         const user_id = request?.user?.user_id ? request?.user?.user_id : null;
-        if(!(langFrom && langTo && email && request.files?.files)) {
+        if(!(langFrom && langTo && email && countWords && request.files?.files)) {
             return response.json({
                 status: false,
-                message: "The [langFrom, langTo, email, files] parameters is required"
+                message: "The [langFrom, langTo, email, countWords, files] parameters is required"
             })
         }
-        return response.json(await serviceCreate(+user_id, email, langFrom, langTo, request.files.files));
+        return response.json(await serviceCreate(+user_id, email, langFrom, langTo, countWords, request.files.files));
     },
 
     /**
@@ -69,7 +69,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     getOrders: async function(request, response) {
-        const user_id = request.user.user_id
+        const user_id = request?.user?.user_id;
         return response.json(await serviceGetOrders(user_id, request.query));
     }
 
