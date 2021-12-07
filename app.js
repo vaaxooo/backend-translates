@@ -3,7 +3,6 @@
 const app = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
-const expressOasGenerator = require('express-oas-generator');
 
 const bodyParser = require('body-parser');
 const {postgres} = require('./src/utils/postgres');
@@ -17,7 +16,12 @@ const {LanguagesRoutes} = require('./src/config/routes/admin/languages');
 const {TranslationsRoutes} = require('./src/config/routes/translations');
 const {AdminOrdersRoutes} = require('./src/config/routes/admin/orders');
 const {AdminUsersRoutes} = require('./src/config/routes/admin/users');
+
+
+/* PAYMENT SYSTEMS */
 const {PiastrixRoutes} = require('./src/config/routes/payments/piastrix');
+const {StripeRoutes} = require('./src/config/routes/payments/stripe');
+
 /* END IMPORTS */
 
 const express = app();
@@ -50,6 +54,7 @@ express.use('/api/admin/languages', LanguagesRoutes);
 express.use('/api/admin/orders', AdminOrdersRoutes);
 express.use('/api/admin/users', AdminUsersRoutes);
 express.use('/api/payments/piastrix', PiastrixRoutes);
+express.use('/api/payments/stripe', StripeRoutes);
 /* END ROUTES */
 express.use(app.static('./uploads'));
 
