@@ -27,7 +27,7 @@ module.exports = {
                     message: "Order not found"
                 }
             }
-            const price = (order.price * 100);
+            const price = parseInt(order.price * 100);
             if(price < 50) {
                 return {
                     status: false,
