@@ -187,8 +187,8 @@ module.exports = {
                     },
                 ],
                 mode: 'payment',
-                success_url: success_link,
-                cancel_url: fail_link
+                success_url: `https://ontranslator-back.dev.it-redcat.com/api/payments/stripe/success-order?session_id={CHECKOUT_SESSION_ID}&payment_id=${id}`,
+                cancel_url: `https://ontranslator-back.dev.it-redcat.com/api/payments/stripe/cancel-order?session_id={CHECKOUT_SESSION_ID}&payment_id=${id}`
             });
 
             await Transactions.create({
@@ -207,8 +207,99 @@ module.exports = {
                 message: "Oops.. Something went wrong"
             }
         }
-    }
+    },
 
+
+
+
+    /**
+     *
+     * @param session_id
+     * @param payment_id
+     * @returns {Promise<boolean>}
+     */
+    servicePopreySuccess: async function (session_id, payment_id) {
+        try {
+            const invoice = await stripe.checkout.sessions.retrieve(session_id);
+            const order = await Orders.findOne({
+                where: {
+                    id: payment_id
+                }
+            });
+            if (!order) {
+                return {
+                    status: false,
+                    message: "Order not found"
+                }
+            }
+            if (invoice.payment_status === "paid") {
+                await Orders.update({
+                    paid: true
+                }, {
+                    where: {
+                        id: payment_id
+                    }
+                });
+            }
+            await Transactions.update({
+                status: invoice.payment_status,
+                currency: invoice.currency
+            }, {
+                where: {
+                    payment_id: payment_id,
+                    email: order.email
+                }
+            });
+            return order.success_link;
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
+    },
+
+
+    /**
+     *
+     * @param session_id
+     * @param payment_id
+     * @returns {Promise<boolean>}
+     */
+    servicePopreyCancel: async function (session_id, payment_id) {
+        try {
+            const invoice = await stripe.checkout.sessions.retrieve(session_id);
+            const order = await Orders.findOne({
+                where: {
+                    id: payment_id
+                }
+            });
+            if (!order) {
+                return {
+                    status: false,
+                    message: "Order not found"
+                }
+            }
+
+            await Transactions.update({
+                status: invoice.payment_status,
+            }, {
+                where: {
+                    payment_id: payment_id,
+                    email: order.email
+                }
+            });
+
+            return order.fail_link;
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
+    },
 
 
 }

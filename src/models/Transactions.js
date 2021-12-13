@@ -31,7 +31,9 @@ Transactions.init({
         allowNull: true
     },
     processed: DataTypes.STRING,
-    status: DataTypes.STRING
+    status: DataTypes.STRING,
+    success_link: DataTypes.STRING,
+    fail_link: DataTypes.STRING
 }, {
     sequelize: postgres,
     modelName: 'transactions',

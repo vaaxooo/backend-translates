@@ -2,7 +2,9 @@ const {
     serviceCreate,
     serviceSuccess,
     serviceCancel,
-    servicePoprey
+    servicePoprey,
+    servicePopreySuccess,
+    servicePopreyCancel
 } = require('../../services/payments/StripeService');
 
 module.exports = {
@@ -55,6 +57,27 @@ module.exports = {
      */
     poprey: async function(request, response) {
         response.redirect(await servicePoprey(request.body));
+    },
+
+
+    /**
+     * Stripe success
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    popreySuccess: async function(request, response) {
+        response.redirect(await servicePopreySuccess(request.query.session_id, request.query.payment_id));
+    },
+
+    /**
+     * Stripe cancel
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    popreyCancel: async function(request, response) {
+        response.redirect(await servicePopreyCancel(request.query.session_id, request.query.payment_id));
     },
 
 }

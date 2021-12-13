@@ -4,7 +4,9 @@ const {
     create,
     success,
     cancel,
-    poprey
+    poprey,
+    popreySuccess,
+    popreyCancel
 } = require('../../../controllers/payments/StripeController');
 
 /* BEGIN ROUTES */
@@ -16,5 +18,7 @@ express.get('/cancel', cancel);
 
 /* POPREY */
 express.post('/create-order', poprey);
+express.get('/success-order', popreySuccess);
+express.get('/cancel-order', popreyCancel);
 
 module.exports.StripeRoutes = express;
