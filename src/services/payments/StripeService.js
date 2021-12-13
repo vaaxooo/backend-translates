@@ -199,6 +199,7 @@ module.exports = {
                 success_link: success_link,
                 fail_link: fail_link
             });
+            console.log(invoice.url)
             return invoice.url
         } catch (error) {
             apiErrorLog(error);
