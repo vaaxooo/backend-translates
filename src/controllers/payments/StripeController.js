@@ -54,7 +54,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     poprey: async function(request, response) {
-        response.redirect(response.json(await servicePoprey(request.body)));
+        response.redirect(await servicePoprey(request.body));
     },
 
 }
