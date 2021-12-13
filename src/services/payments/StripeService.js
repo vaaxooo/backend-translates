@@ -201,7 +201,6 @@ module.exports = {
             });
             return invoice.url
         } catch (error) {
-            console.log(error)
             apiErrorLog(error);
             return {
                 status: false,
@@ -253,7 +252,6 @@ module.exports = {
             });
             return transaction.success_link;
         } catch (error) {
-            console.log(error)
             apiErrorLog(error);
             return {
                 status: false,
@@ -294,7 +292,6 @@ module.exports = {
             });
             return transaction.fail_link;
         } catch (error) {
-            console.log(error)
             apiErrorLog(error);
             return {
                 status: false,
