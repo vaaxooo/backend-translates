@@ -199,8 +199,6 @@ module.exports = {
                 success_link: success_link,
                 fail_link: fail_link
             });
-            console.log(invoice.url)
-            return
             return invoice.url
         } catch (error) {
             apiErrorLog(error);
@@ -252,8 +250,6 @@ module.exports = {
                     email: order.email
                 }
             });
-            console.log(order.success_link)
-            return
             return order.success_link;
         } catch (error) {
             apiErrorLog(error);
@@ -294,8 +290,6 @@ module.exports = {
                     email: order.email
                 }
             });
-            console.log("CANCEL" + order.success_link)
-            return
             return order.fail_link;
         } catch (error) {
             apiErrorLog(error);
