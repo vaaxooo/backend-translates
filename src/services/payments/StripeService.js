@@ -222,15 +222,15 @@ module.exports = {
     servicePopreySuccess: async function (session_id, payment_id) {
         try {
             const invoice = await stripe.checkout.sessions.retrieve(session_id);
-            const order = await Orders.findOne({
+            const transaction = await Transactions.findOne({
                 where: {
                     payment_id: payment_id
                 }
             });
-            if (!order) {
+            if (!transaction) {
                 return {
                     status: false,
-                    message: "Order not found"
+                    message: "Transaction not found"
                 }
             }
             if (invoice.payment_status === "paid") {
@@ -248,10 +248,10 @@ module.exports = {
             }, {
                 where: {
                     payment_id: payment_id,
-                    email: order.email
+                    email: transaction.email
                 }
             });
-            return order.success_link;
+            return transaction.success_link;
         } catch (error) {
             console.log(error)
             apiErrorLog(error);
@@ -272,15 +272,15 @@ module.exports = {
     servicePopreyCancel: async function (session_id, payment_id) {
         try {
             const invoice = await stripe.checkout.sessions.retrieve(session_id);
-            const order = await Orders.findOne({
+            const transaction = await Transactions.findOne({
                 where: {
                     payment_id: payment_id
                 }
             });
-            if (!order) {
+            if (!transaction) {
                 return {
                     status: false,
-                    message: "Order not found"
+                    message: "Transaction not found"
                 }
             }
 
@@ -289,10 +289,10 @@ module.exports = {
             }, {
                 where: {
                     payment_id: payment_id,
-                    email: order.email
+                    email: transaction.email
                 }
             });
-            return order.fail_link;
+            return transaction.fail_link;
         } catch (error) {
             console.log(error)
             apiErrorLog(error);
