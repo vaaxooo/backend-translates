@@ -1,7 +1,8 @@
 const {
     serviceCreate,
     serviceSuccess,
-    serviceCancel
+    serviceCancel,
+    servicePoprey
 } = require('../../services/payments/StripeService');
 
 module.exports = {
@@ -43,6 +44,17 @@ module.exports = {
     cancel: async function(request, response) {
         await serviceCancel(request.query.session_id, request.query.order_id);
         return response.status(200).send('OK');
+    },
+
+
+    /**
+     * Generation poprey payment url
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    poprey: async function(request, response) {
+        return response.json(await servicePoprey(request.body));
     },
 
 }

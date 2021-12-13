@@ -14,21 +14,21 @@ module.exports = {
      * @param currency
      * @returns {Promise<{paymentURL: string, status: boolean}|{message: string, status: boolean}>}
      */
-    serviceCreate: async function(order_id, currency) {
+    serviceCreate: async function (order_id, currency) {
         try {
             const order = await Orders.findOne({
                 where: {
                     id: order_id
                 }
             });
-            if(!order) {
+            if (!order) {
                 return {
                     status: false,
                     message: "Order not found"
                 }
             }
             const price = parseInt(order.price * 100);
-            if(price < 50) {
+            if (price < 50) {
                 return {
                     status: false,
                     message: "The Checkout Session's total amount due must add up to at least 0.50 " + currency
@@ -78,7 +78,7 @@ module.exports = {
      * @param order_id
      * @returns {Promise<boolean>}
      */
-    serviceSuccess: async function(session_id, order_id) {
+    serviceSuccess: async function (session_id, order_id) {
         try {
             const invoice = await stripe.checkout.sessions.retrieve(session_id);
             const order = await Orders.findOne({
@@ -86,13 +86,13 @@ module.exports = {
                     id: order_id
                 }
             });
-            if(!order) {
+            if (!order) {
                 return {
                     status: false,
                     message: "Order not found"
                 }
             }
-            if(invoice.payment_status === "paid") {
+            if (invoice.payment_status === "paid") {
                 await Orders.update({
                     paid: true
                 }, {
@@ -127,7 +127,7 @@ module.exports = {
      * @param order_id
      * @returns {Promise<boolean>}
      */
-    serviceCancel: async function(session_id, order_id) {
+    serviceCancel: async function (session_id, order_id) {
         try {
             const invoice = await stripe.checkout.sessions.retrieve(session_id);
             const order = await Orders.findOne({
@@ -135,7 +135,7 @@ module.exports = {
                     id: order_id
                 }
             });
-            if(!order) {
+            if (!order) {
                 return {
                     status: false,
                     message: "Order not found"
@@ -160,5 +160,59 @@ module.exports = {
             }
         }
     },
+
+
+    /*################################*/
+    /*              POPREY            */
+    /*################################*/
+
+    servicePoprey: async function (params) {
+        try {
+            console.log(params)
+            const {id, email, amount_usd, amount, cur} = params;
+            const success_link = params.return;
+            const fail_link = params.return_fail;
+
+            const sum_to_pay = parseInt(amount * 100);
+            const invoice = await stripe.checkout.sessions.create({
+                line_items: [
+                    {
+                        price_data: {
+                            currency: cur,
+                            product_data: {
+                                name: 'Payment for text translation',
+                            },
+                            unit_amount: sum_to_pay,
+                        },
+                        quantity: 1,
+                    },
+                ],
+                mode: 'payment',
+                success_url: success_link,
+                cancel_url: fail_link
+            });
+
+            await Transactions.create({
+                email: email,
+                payment_id: id,
+                amount: sum_to_pay,
+                status: "Waiting for payment"
+            });
+            return {
+                status: true,
+                invoice
+            }
+
+        } catch (error) {
+            error
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
+    }
+
+
 
 }
