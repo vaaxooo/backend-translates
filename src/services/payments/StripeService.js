@@ -223,7 +223,7 @@ module.exports = {
             const invoice = await stripe.checkout.sessions.retrieve(session_id);
             const order = await Orders.findOne({
                 where: {
-                    id: payment_id
+                    payment_id: payment_id
                 }
             });
             if (!order) {
@@ -272,7 +272,7 @@ module.exports = {
             const invoice = await stripe.checkout.sessions.retrieve(session_id);
             const order = await Orders.findOne({
                 where: {
-                    id: payment_id
+                    payment_id: payment_id
                 }
             });
             if (!order) {
