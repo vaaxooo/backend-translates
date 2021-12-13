@@ -168,7 +168,6 @@ module.exports = {
 
     servicePoprey: async function (params) {
         try {
-            console.log(params)
             const {id, email, amount_usd, amount, cur} = params;
             const success_link = params.return;
             const fail_link = params.return_fail;
@@ -196,15 +195,12 @@ module.exports = {
                 email: email,
                 payment_id: id,
                 amount: sum_to_pay,
-                status: "Waiting for payment"
+                status: "Waiting for payment",
+                success_link: success_link,
+                fail_link: fail_link
             });
-            return {
-                status: true,
-                invoice
-            }
-
+            return invoice.url
         } catch (error) {
-            error
             apiErrorLog(error);
             return {
                 status: false,
