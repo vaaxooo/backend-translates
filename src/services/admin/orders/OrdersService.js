@@ -208,6 +208,35 @@ module.exports = {
                 message: "Oops.. Something went wrong"
             }
         }
+    },
+
+
+
+    /**
+     * @returns {Promise<void>}
+     */
+    serviceGetTransactions: async function(params = {}) {
+        try {
+            let sort = [];
+            params?.processed ? sort.push(['processed', params.processed]) : null;
+            params?.status ? sort.push(['status', params.status]) : null;
+            params?.amount ? sort.push(['amount', params.amount]) : null;
+            const transactions = await Transactions.findAll({
+                order: sort,
+                offset: params?.offset || 0,
+                limit: params?.limit || 10
+            });
+            return {
+                status: true,
+                data: transactions
+            }
+        } catch (error) {
+            apiErrorLog(error);
+            return {
+                status: false,
+                message: "Oops.. Something went wrong"
+            }
+        }
     }
 
 }

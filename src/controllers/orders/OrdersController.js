@@ -74,15 +74,6 @@ module.exports = {
     },
 
 
-    /**
-     * Admin: Get Transactions list
-     * @param request
-     * @param response
-     * @returns {Promise<*>}
-     */
-    getTransactions: async function(request, response) {
-        const user_id = request?.user?.user_id;
-        return response.json(await serviceGetTransactions(user_id, request.query));
-    }
+
 
 }

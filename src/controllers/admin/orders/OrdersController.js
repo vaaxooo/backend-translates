@@ -99,6 +99,16 @@ module.exports = {
             })
         }
         return response.json(await serviceStatus(order_id, status));
+    },
+
+    /**
+     * Admin: Get Transactions list
+     * @param request
+     * @param response
+     * @returns {Promise<*>}
+     */
+    getTransactions: async function(request, response) {
+        return response.json(await serviceGetTransactions(request.query));
     }
 
 }
